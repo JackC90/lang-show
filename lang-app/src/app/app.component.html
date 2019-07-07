@@ -1,0 +1,2 @@
+<app-sidenav *ngIf="!isPublic(router.url)"></app-sidenav>
+<router-outlet *ngIf="isPublic(router.url)"></router-outlet>

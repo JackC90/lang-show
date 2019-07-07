@@ -1,0 +1,45 @@
+//colors
+$robins_egg_blue: 	#00cccc;
+$japanese_laurel: 	#2F7C37;
+$red: 			  	#ffcdd2;
+$teal: 				#b2dfdb;
+$gray: 				gray;
+$purple_heart: 		rgb(105, 53, 156);
+$alice_blue: 		#F0F8FF;
+$gainsboro : 		#DCDCDC;
+$cerulean_blue:		#3366BB;
+
+//urls
+// fonts
+$url_font_roboto: "https://fonts.googleapis.com/css?family=Roboto";
+$url_font_montserrat: "https://fonts.googleapis.com/css?family=Montserrat";
+$url_material_icon: "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+// images
+$url_img_nanjing: "https://cdn.pixabay.com/photo/2017/09/26/07/54/nanjing-2787946_1280.jpg";
+$url_img_gold_temple: "https://cdn.pixabay.com/photo/2017/09/05/13/19/chines-2717547_1280.jpg";
+$url_img_temple: "https://images.pexels.com/photos/356614/pexels-photo-356614.jpeg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb";
+$url_img_geometric: "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb";
+
+// Fonts
+@import url($url_font_roboto);
+@import url($url_font_montserrat);
+@import url($url_material_icon);
+
+/* You can add global styles to this file, and also import other style files */
+@import " ~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import '~@angular/material/_theming';
+
+@include mat-core();
+
+// $primary: mat-color($mat-purple);
+// $accent: mat-color($mat-teal);
+// $warn: mat-color($mat-red);
+
+// $app-theme: mat-light-theme(
+// 	$primary,
+// 	$accent,
+// 	$warn
+// );
+
+// @include angular-material-theme($app-theme);

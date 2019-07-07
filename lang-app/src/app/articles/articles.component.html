@@ -1,0 +1,78 @@
+<div class="container" fxFlex="100%">
+  <div class="expansion-container">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="margin-right">note_add</mat-icon> New Article 
+          </mat-panel-title>
+          <mat-panel-description>
+            Create a new article.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="newArticleForm" autocomplete="off" *ngIf="newArticleForm">
+          <div *ngFor="let field of articleFields" class="form-fields-container">
+            <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="70%">
+              <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}" matAutosizeMinRows="10"></textarea>
+              <mat-error *ngIf="form.showError(newArticleForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayoutAlign="end">
+            <button mat-raised-button color="primary" type="button" (click)="createArticle()" [disabled]="!newArticleForm.valid">Save</button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="margin-right">note_add</mat-icon> Extract Article 
+          </mat-panel-title>
+          <mat-panel-description>
+            Input a URL to begin extraction.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="extractForm" autocomplete="off" *ngIf="extractForm">
+          <div *ngFor="let field of extractFields" class="form-fields-container">
+            <mat-form-field fxFlex="70%" *ngIf="(field.type == 'textarea')">
+              <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+              <mat-error *ngIf="form.showError(extractForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-checkbox *ngIf="(field.type == 'checkbox')" formControlName="{{ field.key }}">{{ field.label }}</mat-checkbox>
+          </div>
+
+          <div fxLayoutAlign="end">
+            <button mat-raised-button color="primary" type="button" (click)="extract()" [disabled]="!extractForm.valid">Extract</button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <mat-card class="article-card" *ngFor="let article of articles; trackBy:article?.id">
+    <mat-card-header>
+      <mat-card-title>
+        <a [routerLink]="[article.id]" routerLinkActive="active">
+          <h3>{{ article.title }}</h3>
+        </a>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <a href="{{ article.source_url }}" target="_blank" routerLinkActive="active">
+          <small><i>{{ article.source_url }}</i></small>
+        </a>
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <p [innerHTML]="app.printTruncate(article.body)">
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

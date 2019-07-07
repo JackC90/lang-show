@@ -1,0 +1,85 @@
+<div class="container" fxFlex="100%">
+  <div class="expansion-container">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="margin-right">note_add</mat-icon> New Task 
+          </mat-panel-title>
+          <mat-panel-description>
+            Create a new assignment.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="newTaskForm" autocomplete="off" *ngIf="newTaskForm">
+          <div *ngFor="let field of taskField" class="form-fields-container">
+            <mat-form-field  *ngIf="(field.type == 'text')" fxFlex="70%">
+              <input matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}">
+              <mat-error *ngIf="form.showError(newTaskForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="70%">
+              <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+              <mat-error *ngIf="form.showError(newTaskForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="(field.type == 'datepicker')">
+              <input matInput [matDatepicker]="picker" placeholder="{{ field.label }}">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="(field.type == 'select')">
+              <mat-select placeholder="{{ field.label }}" formControlName="{{ field.key }}">
+                <mat-option *ngFor="let option of options[field.key]; let i = index" [value]="i">
+                  {{ option }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.showError(newTaskForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayoutAlign="end">
+            <button mat-raised-button color="primary" type="button" (click)="createTask()" [disabled]="!newTaskForm.valid">Save</button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <mat-card class="task-card" *ngFor="let task of tasks; trackBy:task?.id">
+    <mat-card-header>
+      <div mat-card-avatar class="header-image" [ngSwitch]="task.status" matTooltip="{{ task.status }}">
+        <mat-icon *ngSwitchCase="'active'" [ngClass]="'status-'+task.status">assignment</mat-icon>
+        <mat-icon *ngSwitchCase="'done'" [ngClass]="'status-'+task.status">assignment_turned_in</mat-icon>
+        <mat-icon *ngSwitchCase="'overdue'" [ngClass]="'status-'+task.status">assignment_late</mat-icon>
+        <mat-icon *ngSwitchCase="'inactive'" [ngClass]="'status-'+task.status">cancel</mat-icon>
+      </div>
+      <mat-card-title>
+        <a [routerLink]="[task.id]" routerLinkActive="active" routerLinkActive="active">
+          <h3>{{ task.title }}</h3>
+        </a>
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ task.deadline | date:'fullDate'}}
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <p>
+        {{ app.printTruncate(task.description, 200) }}
+      </p>
+    </mat-card-content>
+    <mat-card-subtitle *ngIf="task.notes">
+      <p>
+        Note: {{ app.printTruncate(task.notes, 20) }}
+      </p>
+    </mat-card-subtitle>
+  </mat-card>
+</div>

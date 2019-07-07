@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  text: MyString
+  pinyin: MyString
+  meaning: MyText
+  note: MyText
+  language: one
+  user: one
+
+two:
+  text: MyString
+  pinyin: MyString
+  meaning: MyText
+  note: MyText
+  language: two
+  user: two

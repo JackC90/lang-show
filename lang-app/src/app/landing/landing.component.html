@@ -1,0 +1,57 @@
+<div>  
+  <div parallax class="jumbotron">  
+    <div id="shade"></div>
+    
+    <div style="" class="animated fadeInDown">
+      <div class="title container" [@titleAnimation]='state'>
+        <h1>Vocabulary building<br class="visible-lg "/> for language learners.</h1>
+        <hr/>
+
+        <div class="subtitle">
+          <h2 class="subtitle">Build your vocabulary.</h2>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="main-wrapper">
+    <div class="main-content">
+      <div fxFlex="60%">
+        <h3>Language Task Manager</h3>
+        <p>
+          A todo list app that helps you build your vocabulary. 
+        </p>
+        
+        <div class="white-box">
+          <ul>
+            <li><p class="">Create assignments for yourself.</p></li>
+            <li><p class="">Save articles for reading.</p></li>
+            <li><p class="">Add new words to your vocabulary list. </p></li>
+            <li><p class="">Practice with flashcards.</p></li>
+          </ul>
+        </div>
+
+        <p class="final-cta">Get an account today, or log in to your account.</p>
+      </div>
+      
+      <div class="form-wrapper" fxFlex="40%" fxLayoutAlign="end">
+        <mat-card>
+          <nav mat-tab-nav-bar>
+            <a mat-tab-link
+              *ngFor="let link of navLinks"
+              [routerLink]="link.path"
+              routerLinkActive="active">
+              {{link.label}}
+            </a>
+          </nav>
+          <router-outlet></router-outlet>
+        </mat-card>
+      </div> 
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">© 2017 Some Company Ltd. All rights reserved.</div>
+  </footer>
+</div>

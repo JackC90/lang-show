@@ -1,0 +1,34 @@
+<div class="language-container" *ngIf="languages">
+  <mat-toolbar color="primary" layout="row" class="nav-toolbar">
+    Languages
+  </mat-toolbar>
+
+  <mat-dialog-content>
+    <div class="language-body">
+      <p>
+        I'm currently studying this language:
+      </p>
+
+      <h2 *ngIf="setLanguage">
+        {{ setLanguage.name }} <span *ngIf="setLanguage.native_name">({{ setLanguage.native_name }})</span>
+      </h2>
+
+      <form [formGroup]="languageForm" autocomplete="off" *ngIf="languages">
+        <mat-form-field class="form-fields-container" fxFlex="70%">
+          <mat-select formControlName="{{ languageFields[0].key }}">
+            <mat-option *ngFor="let language of languages" [value]="language.id">
+              {{ language.name }} <span *ngIf="language.native_name">({{ language.native_name }})</span>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.showError(languageForm, languageFields[0].key)">
+            {{ languageFields[0].label }} is required.
+          </mat-error>
+        </mat-form-field>
+      </form>
+
+      <div fxLayoutAlign="end">
+        <button mat-raised-button color="primary" type="button" (click)="updateLanguage()">Switch</button>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>

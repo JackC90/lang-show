@@ -1,0 +1,68 @@
+<div class="nav-container">
+  <mat-toolbar color="primary" layout="row" class="nav-toolbar">
+    <!-- Toggle Left Navigation Sidebar -->
+    <button type="button" mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon class="toolbar-icon" *ngIf="sidenav.opened">keyboard_arrow_left</mat-icon>
+      <mat-icon class="toolbar-icon" *ngIf="!sidenav.opened">keyboard_arrow_right</mat-icon>
+    </button>
+
+    <span>{{ title }}</span>
+    <span class="toolbar-spacer"></span>
+    <button type="button" mat-icon-button class="toolbar-btn">
+      <mat-icon class="toolbar-icon">search</mat-icon>
+    </button>
+
+    <!-- Dropdown Main Menu -->
+    <button type="button" mat-icon-button class="toolbar-btn">
+      <mat-icon class="toolbar-icon" [matMenuTriggerFor]="menu">menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="openLanguageDialog()">
+        <mat-icon>language</mat-icon>
+        <span>Language</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Options</span>
+      </button>
+      <button mat-menu-item (click)="signOut()">
+        <mat-icon>highlight_off</mat-icon>
+        <span>Signout</span>
+      </button>
+    </mat-menu>
+
+    <!-- Toggle Right Sidebar -->
+    <button type="button" mat-icon-button (click)="sidenavRight.toggle()" *ngIf="hasContent">
+      <mat-icon class="toolbar-icon" *ngIf="sidenavRight.opened">keyboard_arrow_right</mat-icon>
+      <mat-icon class="toolbar-icon" *ngIf="!sidenavRight.opened">keyboard_arrow_left</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Left: Navigation Sidenav -->
+    <mat-sidenav class="sidenav" #sidenav mode="side" [opened]="openSidenavLeft" fixedTopGap="64" fixedInViewport="side" (opened)="openSidenavLeft = !openSidenavLeft">
+      <div class="sidenav-profile-box" [ngStyle]="{'background' : 'url(../../assets/img/background-purple.jpg)', 'background-size': 'cover'}">
+      </div>
+
+      <mat-nav-list>
+        <a mat-list-item *ngFor="let navLink of navLinks" [routerLink]="['/main', navLink.path]" routerLinkActive="active">
+          {{navLink.data.title}}
+        </a>
+      </mat-nav-list>
+
+      <div class="sidenav-footer">
+      </div>
+    </mat-sidenav>
+
+    <!-- Main Content Window -->
+    <mat-sidenav-content class="sidenav-content" [ngStyle]="{'background' : 'url(../../assets/img/winter-2080070_640.jpg) no-repeat fixed center/cover'}">
+      <div id="sidenav-bg-shade"></div>
+      <app-sidenav-content fxFlex="100%"></app-sidenav-content>
+    </mat-sidenav-content>  
+
+    <!-- Right: Details Sidenav -->
+    <mat-sidenav align="end" #sidenavRight mode="side" class="sidenav-right" [opened]="openSidenavRight" fixedTopGap="64" fixedInViewport>
+      <app-word></app-word>
+    </mat-sidenav>
+  </mat-sidenav-container>
+</div>

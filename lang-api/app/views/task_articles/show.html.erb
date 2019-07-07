@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Article:</strong>
+  <%= @task_article.article %>
+</p>
+
+<p>
+  <strong>Task:</strong>
+  <%= @task_article.task %>
+</p>
+
+<%= link_to 'Edit', edit_task_article_path(@task_article) %> |
+<%= link_to 'Back', task_articles_path %>

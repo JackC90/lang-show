@@ -1,0 +1,80 @@
+<div class="sentences-container" *ngIf="word">
+  <h4 class="subtitle">Sentences <span>({{ word.sentences.length }})</span></h4>
+    <div #sentences>
+      <div *ngIf="word.sentences.length > 0">
+        <mat-card *ngFor="let sentence of word.sentences">
+          <mat-card-content *ngIf="!editSentenceMode(sentence)">
+            <p class="size-16" innerHTML="{{ app.parseSentence(sentence.text, word.text) }}"></p>
+            <cite fxLayoutAlign="start" *ngIf="sentence.source_url || sentence.reference">
+              <a href="{{ sentence.source_url }}" target="_blank">{{ sentence.reference ? sentence.reference : sentence.source_url }}</a>
+            </cite>
+            <p class="grey bold" fxLayoutAlign="start" *ngIf="sentence.note"><small>Notes: {{ sentence.note }}</small></p>
+            <div fxLayoutAlign="end">
+              <button mat-icon-button color="primary" type="button" (click)="editSentence(sentence)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+  
+          <mat-card-content class="task-card" *ngIf="editSentenceMode(sentence)">
+            <form [formGroup]="sentenceForm" autocomplete="off">
+              <div *ngFor="let field of sentenceFields" class="form-fields-container">
+                <mat-form-field  *ngIf="(field.type == 'text')" fxFlex="100%">
+                  <input matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}">
+                  <mat-error *ngIf="form.showError(sentenceForm, field.key)">
+                    {{ field.label }} is required.
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="100%">
+                  <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+                  <mat-error *ngIf="form.showError(sentenceForm, field.key)">
+                    {{ field.label }} is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-card-actions fxLayoutAlign="end">
+                <button mat-raised-button color="primary" type="button" (click)="updateSentence(sentence)">
+                  <mat-icon>save</mat-icon> Save
+                </button>
+              </mat-card-actions>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      
+      <mat-card *ngIf="!newSentenceMode" (click)="newSentence()">
+        <p class="size-16">Add sentence ...</p>
+      </mat-card>
+
+      <mat-card class="task-card" *ngIf="newSentenceMode && sentenceForm">
+        <form [formGroup]="sentenceForm" autocomplete="off" #f="ngForm">
+          <div *ngFor="let field of sentenceFields" class="form-fields-container">
+            <mat-form-field  *ngIf="(field.type == 'text')" fxFlex="100%">
+              <input matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}">
+              <mat-error *ngIf="form.showError(sentenceForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="100%">
+              <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+              <mat-error *ngIf="form.showError(sentenceForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-card-actions fxLayoutAlign="end">
+            <button mat-raised-button color="primary" type="button" (click)="viewSentence()">
+              <mat-icon>visibility</mat-icon> View
+            </button>
+            <button mat-raised-button color="primary" type="button" (click)="createSentence()" [disabled]="!sentenceForm.valid">
+              <mat-icon>save</mat-icon> Save
+            </button>
+          </mat-card-actions>
+        </form>
+      </mat-card> 
+    </div>
+</div>

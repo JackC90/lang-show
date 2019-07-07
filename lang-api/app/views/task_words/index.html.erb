@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Task Words</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Word</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @task_words.each do |task_word| %>
+      <tr>
+        <td><%= task_word.task %></td>
+        <td><%= task_word.word %></td>
+        <td><%= link_to 'Show', task_word %></td>
+        <td><%= link_to 'Edit', edit_task_word_path(task_word) %></td>
+        <td><%= link_to 'Destroy', task_word, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Task Word', new_task_task_word_path %>

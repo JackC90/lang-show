@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Text:</strong>
+  <%= @sentence.text %>
+</p>
+
+<p>
+  <strong>Source url:</strong>
+  <%= @sentence.source_url %>
+</p>
+
+<p>
+  <strong>Reference:</strong>
+  <%= @sentence.reference %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @sentence.note %>
+</p>
+
+<%= link_to 'Edit', edit_sentence_path(@sentence) %> |
+<%= link_to 'Back', sentences_path %>

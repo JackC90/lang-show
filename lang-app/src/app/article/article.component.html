@@ -1,0 +1,57 @@
+<div class="container" fxFlex="100%" *ngIf="article">
+  <mat-card class="article-card" *ngIf="!editArticleMode">
+    <mat-card-header>
+      <div fxFlex="75">
+        <h3 matLine>
+          <span>{{ article.title }}</span>
+        </h3>
+      </div>
+
+      <div>
+        <button mat-raised-button (click)="editArticle()" color="primary" *ngIf="!editArticleMode">
+          <mat-icon>mode_edit</mat-icon> Edit
+        </button>
+        <button mat-raised-button (click)="openTasksDialog()" color="accent" *ngIf="!editArticleMode">
+          <mat-icon>link</mat-icon> Link Task
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-header>
+      <mat-card-subtitle>
+        <a href="{{ article.source_url }}" target="_blank" routerLinkActive="active">
+          {{ article.source_url }}
+        </a>
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="article-body-container">
+        <p [innerHTML]="app.printParaSpace(article.body)">
+        </p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="editArticleMode && editArticleForm">
+    <form [formGroup]="editArticleForm" autocomplete="off">
+      <div *ngFor="let field of articleFields" class="form-fields-container">
+        <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="70%">
+          <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}" matAutosizeMinRows="10"></textarea>
+          <mat-error *ngIf="form.showError(editArticleForm, field.key)">
+            {{ field.label }} is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayoutAlign="end">
+        <button mat-raised-button (click)="editArticle()" *ngIf="editArticleMode">
+          <mat-icon>visibility</mat-icon> View
+        </button>
+        <button mat-raised-button color="primary" type="button" (click)="updateArticle()" [disabled]="!editArticleForm.valid">Save</button>
+      </div>
+    </form>
+  </mat-card>
+
+  <app-words [article]="article"></app-words>
+</div>

@@ -1,0 +1,19 @@
+<div class="words-container" *ngIf="words">
+  <mat-card class="words-card">
+    <mat-card-actions align="end">
+      <small class="grey padding-right-10">{{ unsavedCount(hot) }} unsaved change(s).</small>
+      <button mat-raised-button (click)="saveChanges(hot)" color="primary">
+        <mat-icon>save</mat-icon> Save
+      </button>
+    </mat-card-actions>
+    <hotTable 
+      [data]="words" 
+      [options]="tableOptions" 
+      (afterChange)="storeChanges($event)" 
+      (afterSelectionEnd)="showWord($event)"
+      #hot>
+    </hotTable>
+  </mat-card>
+</div>
+
+

@@ -1,0 +1,67 @@
+<div *ngIf="word">
+  <mat-toolbar color="primary">
+    Word
+  </mat-toolbar>
+
+  <mat-card class="no-bottom-margin">
+    <mat-card-header>
+      <h3 matLine fxFlex="80%">
+        <span>{{ word.text ? word.text : word.alt_text }}</span>
+      </h3>
+      <div>
+        <button mat-raised-button (click)="editWord()" color="primary" *ngIf="!editWordMode">
+          <mat-icon>mode_edit</mat-icon> Edit
+        </button>
+        <button mat-raised-button (click)="editWord()" color="primary" *ngIf="editWordMode">
+          <mat-icon>visibility</mat-icon> View
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="!editWordMode">
+        <div>
+          <h4 class="subtitle no-bottom-margin">Traditional</h4>
+          <p class="no-top-margin">{{ app.print(word.alt_text) }}</p>
+        </div>
+        <div>
+          <h4 class="subtitle no-bottom-margin">Pronunciation</h4>
+          <p class="no-top-margin">{{ app.print(word.pinyin) }}</p>
+        </div>
+        <div>
+          <h4 class="subtitle no-bottom-margin">Definition</h4>
+          <p class="no-top-margin">{{ app.print(word.meaning) }}</p>
+        </div>
+        <div *ngIf="word.note">
+          <h4 class="subtitle no-bottom-margin">Notes</h4>
+          <p class="no-top-margin">{{ app.print(word.note) }}</p>
+        </div>
+      </div>
+
+      <div class="word-form" *ngIf="editWordMode">
+        <form [formGroup]="editWordForm" autocomplete="off">
+          <div *ngFor="let field of wordFields" class="form-fields-container">
+            <mat-form-field  *ngIf="(field.type == 'text')" fxFlex="100%">
+              <input matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}">
+              <mat-error *ngIf="form.showError(editWordForm, field.key)">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="100%">
+              <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+            </mat-form-field>
+          </div>
+
+          <mat-card-actions fxLayoutAlign="end">
+            <button mat-raised-button color="primary" type="button" [disabled]="!editWordForm.valid" (click)="updateWord()">
+              <mat-icon>save</mat-icon> Save
+            </button>
+          </mat-card-actions>
+        </form>
+      </div>
+
+      <app-sentences [word]="word"></app-sentences>
+    </mat-card-content>
+  </mat-card>
+</div>

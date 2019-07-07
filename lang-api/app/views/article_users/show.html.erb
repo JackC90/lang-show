@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Article:</strong>
+  <%= @article_user.article %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @article_user.user %>
+</p>
+
+<p>
+  <strong>Is owner:</strong>
+  <%= @article_user.is_owner %>
+</p>
+
+<%= link_to 'Edit', edit_article_user_path(@article_user) %> |
+<%= link_to 'Back', article_users_path %>

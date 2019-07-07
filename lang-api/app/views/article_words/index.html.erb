@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Article Words</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Article user</th>
+      <th>Word</th>
+      <th>Encounter no</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @article_words.each do |article_word| %>
+      <tr>
+        <td><%= article_word.article_user %></td>
+        <td><%= article_word.word %></td>
+        <td><%= article_word.encounter_no %></td>
+        <td><%= link_to 'Show', article_word %></td>
+        <td><%= link_to 'Edit', edit_article_word_path(article_word) %></td>
+        <td><%= link_to 'Destroy', article_word, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Article Word', new_article_word_path %>

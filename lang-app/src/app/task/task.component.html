@@ -1,0 +1,186 @@
+<div class="container" fxFlex="100%" *ngIf="task">
+  <mat-card class="task-card" *ngIf="!isEditTaskMode">
+    <mat-card-header>
+      <div mat-card-avatar class="header-image" [ngSwitch]="task.status" matTooltip="{{ task.status }}">
+        <mat-icon *ngSwitchCase="'active'" [ngClass]="'status-'+task.status">assignment</mat-icon>
+        <mat-icon *ngSwitchCase="'done'" [ngClass]="'status-'+task.status">assignment_turned_in</mat-icon>
+        <mat-icon *ngSwitchCase="'overdue'" [ngClass]="'status-'+task.status">assignment_late</mat-icon>
+        <mat-icon *ngSwitchCase="'inactive'" [ngClass]="'status-'+task.status">cancel</mat-icon>
+      </div>
+      <mat-card-title>
+        <h3>{{ task.title }}</h3>
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ task.deadline | date:'fullDate'}}
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <p>
+        {{ task.description }}
+      </p>
+    </mat-card-content>
+    <mat-card-subtitle *ngIf="task.notes">
+      <p>
+        Note: {{ task.notes }}
+      </p>
+    </mat-card-subtitle>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button (click)="editTaskMode()" color="primary">
+        <mat-icon>mode_edit</mat-icon> Edit
+      </button>
+    </mat-card-actions>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button (click)="editItemMode(null, true)" color="primary" [disabled]="isEditItemMode">
+        <mat-icon>my_library_add</mat-icon> Add Checklist...
+      </button>
+    </mat-card-actions>
+
+    <!-- Create new Item form -->
+    <mat-card-content *ngIf="showItemForm(null)">
+      <form [formGroup]="editItemForm" autocomplete="off">
+        <div *ngFor="let field of itemFields" class="form-fields-container">
+          <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="70%">
+            <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+            <mat-error *ngIf="form.showError(editItemForm, field.key)">
+              {{ field.label }} is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-card-actions fxLayoutAlign="end">
+          <button mat-raised-button (click)="editItemMode(null, false)">
+            <mat-icon>pageview</mat-icon> View
+          </button>
+
+          <button mat-raised-button color="primary" type="button" (click)="createItem()" [disabled]="!editItemForm.valid">Save</button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+
+    <mat-card-content class="item-list">
+      <div *ngFor="let item of task.items">
+        <div *ngIf="!showItemForm(item)">
+          <div class="item-icon">
+            <mat-icon mat-list-icon *ngIf="item.is_done">done</mat-icon>
+            <mat-icon mat-list-icon *ngIf="!item.is_done">error</mat-icon>
+          </div>
+          <p matLine class="item-line" fxFlex="70">{{ item.description }}</p>
+          <div fxFlex="20" fxLayoutAlign="end" *ngIf="!showItemForm(item)">
+            <mat-checkbox [(ngModel)]="item.is_done" (change)="updateDone(item)" class="item-icon">
+              Done
+            </mat-checkbox>
+            <button mat-icon-button (click)="editItemMode(item, true)" color="primary">
+              <mat-icon>mode_edit</mat-icon> Edit
+            </button>
+          </div>
+        </div>
+
+        <!-- Edit Item form -->
+        <div *ngIf="showItemForm(item)">
+          <form [formGroup]="editItemForm" autocomplete="off">
+            <div *ngFor="let field of itemFields" class="form-fields-container">
+              <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="70%">
+                <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+                <mat-error *ngIf="form.showError(editItemForm, field.key)">
+                  {{ field.label }} is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxLayoutAlign="end">
+              <button mat-raised-button (click)="editItemMode(null, false)">
+                <mat-icon>pageview</mat-icon> View
+              </button>
+
+              <button mat-raised-button color="primary" type="button" (click)="updateItem(item)" [disabled]="!editItemForm.valid">Save</button>
+            </div>
+          </form>
+        </div>
+        <hr>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="task-card" *ngIf="isEditTaskMode && editTaskForm">
+    <form [formGroup]="editTaskForm" autocomplete="off">
+      <div *ngFor="let field of taskFields" class="form-fields-container">
+        <mat-form-field  *ngIf="(field.type == 'text')" fxFlex="70%">
+          <input matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}">
+          <mat-error *ngIf="form.showError(editTaskForm, field.key)">
+            {{ field.label }} is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field  *ngIf="(field.type == 'textarea')" fxFlex="70%">
+          <textarea matInput placeholder="{{ field.label }}" formControlName="{{ field.key }}"></textarea>
+          <mat-error *ngIf="form.showError(editTaskForm, field.key)">
+            {{ field.label }} is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="(field.type == 'datepicker')">
+          <input matInput [matDatepicker]="picker" placeholder="{{ field.label }}">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="(field.type == 'select')">
+          <mat-select placeholder="{{ field.label }}" formControlName="{{ field.key }}">
+            <mat-option *ngFor="let option of options[field.key]; let i = index" [value]="i">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.showError(editTaskForm, field.key)">
+            {{ field.label }} is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-card-actions fxLayoutAlign="end">
+        <button mat-raised-button (click)="editTaskMode()">
+          <mat-icon>pageview</mat-icon> View
+        </button>
+
+        <button mat-raised-button color="primary" type="button" (click)="updateTask()" [disabled]="!editTaskForm.valid">Save</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>  
+
+  <!-- Linked Articles -->
+  <mat-card *ngIf="hasLinkedArticles()">
+    <mat-card-content>
+      <mat-card-header>
+        <mat-card-title>
+          <h4>Linked Articles</h4>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card *ngFor="let article of task.articles" class="article-card">
+        <mat-card-header>
+          <mat-card-title>
+            <a [routerLink]="['/main', 'articles', article.id]" routerLinkActive="active">
+              <h3>{{ article.title }}</h3>
+            </a>
+          </mat-card-title>
+          <mat-card-subtitle>
+            <a href="{{ article.source_url }}" target="_blank" routerLinkActive="active">
+              <small><i>{{ article.source_url }}</i></small>
+            </a>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            {{ app.printTruncate(article.body) }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+
+  <app-words  *ngIf="task" [task]="task"></app-words>
+</div>
+
+

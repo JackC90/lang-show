@@ -1,0 +1,35 @@
+<div class="tasks-dialog-container" *ngIf="tasks">
+  <mat-toolbar color="primary" layout="row" class="nav-toolbar">
+    Link Tasks
+  </mat-toolbar>
+
+  <mat-dialog-content>
+    <p class="container">
+      Select a task to link.
+    </p>
+    <mat-card class="task-card" *ngFor="let task of tasks; trackBy:task?.id" (click)="updateTaskArticle(task)">
+      <mat-card-header>
+        <div mat-card-avatar class="header-image-h4" [ngSwitch]="task.status" matTooltip="{{ task.status }}">
+          <mat-icon *ngSwitchCase="'active'" [ngClass]="'status-'+task.status">assignment</mat-icon>
+          <mat-icon *ngSwitchCase="'done'" [ngClass]="'status-'+task.status">assignment_turned_in</mat-icon>
+          <mat-icon *ngSwitchCase="'overdue'" [ngClass]="'status-'+task.status">assignment_late</mat-icon>
+          <mat-icon *ngSwitchCase="'inactive'" [ngClass]="'status-'+task.status">cancel</mat-icon>
+        </div>
+        <mat-card-title>
+          <a [routerLink]="['main/tasks' , task.id]" routerLinkActive="active">
+            <h4 class="no-top-margin">{{ task.title }}</h4>
+          </a>
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ task.deadline | date:'fullDate'}}
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <p>
+          {{ app.printTruncate(task.description, 80) }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </mat-dialog-content>
+</div>

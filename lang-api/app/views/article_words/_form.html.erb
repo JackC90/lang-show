@@ -1,0 +1,32 @@
+<%= form_for(article_word) do |f| %>
+  <% if article_word.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(article_word.errors.count, "error") %> prohibited this article_word from being saved:</h2>
+
+      <ul>
+      <% article_word.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :article_user_id %>
+    <%= f.text_field :article_user_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :word_id %>
+    <%= f.text_field :word_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :encounter_no %>
+    <%= f.number_field :encounter_no %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

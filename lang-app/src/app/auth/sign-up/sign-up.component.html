@@ -1,0 +1,32 @@
+<div fxLayout="column">
+  <div class="form-container">
+    <form [formGroup]="_formService.formGroup" (ngSubmit)="_formService.submit()">
+      <h3>Register Here</h3>
+      <h4>Fill out the Form Below to Start Your Account</h4>
+
+      <mat-form-field fxFill>
+        <input matInput placeholder="Username" formControlName="username">
+      </mat-form-field>
+
+      <mat-form-field fxFill>
+        <input matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field fxFill>
+        <input matInput placeholder="Password" [type]="show ? 'text' : 'password'" formControlName="password">
+        <mat-icon matSuffix (click)="show = !show">{{show ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field fxFill>
+        <input matInput placeholder="Confirm Password" [type]="show ? 'text' : 'password'" formControlName="passwordConfirmation">
+        <mat-icon matSuffix (click)="show = !show">{{show ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </mat-form-field>
+
+      <!-- <mat-checkbox formControlName="remember_me" color="primary">Remember me!</mat-checkbox> -->
+
+      <div fxLayoutAlign="end">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!_formService.formGroup.valid">Sign Up</button>
+      </div>
+    </form>
+  </div>
+</div> 
